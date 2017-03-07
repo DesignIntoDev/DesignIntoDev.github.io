@@ -7,28 +7,30 @@
 			<h2 class="invert">Contact :</h2>
 			<br>
 
+			<!-- questionnaire de contact -->
 			<form ng-submit="current.submit()">
-			  <div class="inputGroup">
-				  Name :<br>
-				  <input type="text" ng-model="name" placeholder="Mickey">
-			  </div>
-			  
-			  <div class="inputGroup">
-				  Email :<br>
-				  <input type="email" ng-keypress="current.verifEmail()" ng-class="emailStatus" ng-model="email" placeholder="Mickey@example.com">
-			  </div>
-			  
-			  <div class="inputGroup">
-				  Object :<br>
-				  <input type="text" ng-model="object" placeholder="say Hi">
-			  </div>
-			  
-			  <div class="inputGroup">
-				  Text :<br>
-				  <textarea type="text" ng-model="text" placeholder="Hello, "></textarea>
-			  </div>
+				<div class="inputGroup">
+					Name :<br>
+					<input type="text" ng-model="name" placeholder="Mickey">
+				</div>
 
-			  <input type="submit" value="Send">
+				<div class="inputGroup">
+					Email :<br>
+					<input type="email" ng-keypress="current.verifEmail()" ng-class="emailStatus" ng-model="email" placeholder="Mickey@example.com">
+				</div>
+
+				<div class="inputGroup">
+					Object :<br>
+					<input type="text" ng-model="object" placeholder="say Hi">
+				</div>
+
+				<div class="inputGroup">
+					Text :<br>
+					<textarea type="text" ng-model="text" placeholder="Hello, "></textarea>
+				</div>
+
+				<!-- send to api -->
+				<input type="submit" value="Send">
 			</form>
 		</div>
 

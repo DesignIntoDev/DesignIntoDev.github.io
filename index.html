@@ -252,8 +252,10 @@
             }
         </style>
         <script>
+            // création de l'app Angular
             var app = angular.module("myApp", ["ngRoute"]);
 
+            // déclaration des routes
             app.config(function($routeProvider, $locationProvider) {
                 $routeProvider
                 .when("/", {
@@ -269,6 +271,7 @@
                 })
             });
 
+            // déclaration du controller associé a la page de détail des projets
             app.controller("porfolioCtrl", function($scope, $http) {
 
                 $http.get("src/projects.json").then(function(response) {
@@ -279,15 +282,17 @@
                     $scope.arr = response.data.Container;
                 });
 
+                // cacher l'hint
                 this.hideHint = function() {
-                    console.log("plop");
                     $scope.hint = false;
                 };
 
+                // changement entre data et frontEnd project
                 this.showTab = function(value) {
                     $scope.tab = value;
                 };
 
+                // change le mode d'affichage
                 this.displayMode = function(value) {
                     if(value == 0){
                         $scope.display = "line";
@@ -298,8 +303,10 @@
                     }
                 };
             });
+            //déclaration du controller associé a la page de contact
             app.controller("contactCtrl", function($scope, $http) {
 
+                // lorsqu'on soumet la fiche de contact
                 this.submit = function() {
                     var json = {};
                     json.name = $scope.name;
@@ -307,12 +314,14 @@
                     json.object = $scope.object;
                     json.text = $scope.text;
 
+                    // envoie vers une api node encore en construction
                     if(json.name != undefined && json.email != undefined && json.object != undefined && json.text != undefined)
                         $http.put("http://localhost:5000/new", json).then(function(response){
                         console.log(response);
                         });
                 };
 
+                // si l'entrée ne correspond pas au format d'email
                 this.verifEmail = function() {
                     if($scope.email == undefined)
                         $scope.emailStatus = "warning";
@@ -320,6 +329,7 @@
                 };
             });
 
+            // custom filtre permettant de faire une recherche dans la liste des projets
             app.filter("searchFilter", function() {
                 return function(items, searchStr) {
                     var filtered = [];
@@ -338,6 +348,7 @@
         </script>
     </head>
     <body>
+        <!-- nav en haut de la page fixé -->
         <div class="nav">
             <a href="#/"><span class="brand">D. into D.</span></a>
 
@@ -348,6 +359,7 @@
             </div>
         </div>
 
+        <!-- importation de  -->
         <div ng-app="myApp" class="content">
             <div class="content" ng-view></div>
         </div>
