@@ -1,0 +1,137 @@
+<!-- miniature : http://anto-gx.esy.es/image/.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <script   src="http://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.min.js"></script>
+    
+    <style>
+        body {
+          background-color: blue;
+        }
+
+        h1 {
+          text-align: center;
+        }
+
+        .flag {
+          position: absolute;
+        }
+
+        .flagbox {
+          position: absolute;
+        }
+
+        #tooltip {
+          display: none;
+          padding: 3px;
+          border-radius: 2px;
+          box-shadow: -2px 2px 10px black;
+          z-index: 1;
+          position: absolute;
+          background-color: white;
+        }
+
+        .graph {
+          width: 1000px;
+          height: 800px;
+          margin: auto;
+          box-shadow: -3px 3px 20px black;
+          background-color: black;
+        }
+
+        .link {
+          stroke-width: 1px;
+          stroke: #CCC;
+        }
+    </style>
+    <script>
+        "use strict";
+
+        var animationStep = 200;
+        var nodeRadius = 4;
+        var forceCharge = -100;
+        var linkDistance = 50;
+
+        var graph = d3.select('.graph');
+
+        var width = parseInt(graph.style("width"));
+        var height = parseInt(graph.style("height"));
+
+        var svg = graph.append('svg').attr("width", width).attr("height", height);
+
+        var tooltip = d3.select("#tooltip");
+
+        var request = new XMLHttpRequest();
+        request.addEventListener("load", loaded);
+
+        function loaded() {
+            var data = JSON.parse(request.responseText);
+
+            var force = d3.layout.force().size([width, height]).nodes(data.nodes).links(data.links).linkDistance(linkDistance).charge(forceCharge);
+
+            var link = svg.selectAll('.link').data(data.links).enter().append('line').attr('class', 'link');
+
+            var node = graph.select('.flagbox').selectAll('.node').data(data.nodes).enter().append('img').attr('class', function (d) {
+                return 'flag flag-' + d.code;
+            }).on("mouseover", function (d) {
+                tooltip.style("display", "block");
+                tooltip.html(d.country).style("left", d3.event.pageX + "px").style("top", d3.event.pageY - 28 + "px");
+            }).on("mouseout", function (d) {
+                tooltip.style("display", "none");
+            }).call(force.drag);
+            force.on('tick', function () {
+                //	node.transition().ease('linear').duration(animationStep)
+                node.style('left', function (d) {
+                    return d.x - 8 + "px";
+                }).style('top', function (d) {
+                    return d.y - 5 + "px";
+                });
+                /*
+          node.attr('r', nodeRadius)
+            .attr('cx', d => d.x)
+            .attr('cy', d => d.y);*/
+
+                //link.transition().ease('linear').duration(animationStep)
+                link.attr('x1', function (d) {
+                    return d.source.x;
+                }).attr('x2', function (d) {
+                    return d.target.x;
+                }).attr('y1', function (d) {
+                    return d.source.y;
+                }).attr('y2', function (d) {
+                    return d.target.y;
+                });
+
+                //	force.stop();
+
+                //	setTimeout( () => force.start(),
+                //					 animationStep);
+            });
+
+            force.start();
+        };
+        /*).error( function(err) {
+            console.log("Couldn't load country list: error " + err);
+        })*/
+
+        request.open('GET', "https://www.cs.mun.ca/~h65ped/Public/country%20data%20for%20force%20directed%20graph/countries.json", true);
+        request.send(null);
+    </script>
+</head>
+<body>
+    <h1>Force Directed Graph of State Contiguity</h1>
+    
+    <div class="graph">
+        <div class="flagbox"></div>
+    </div>
+    
+    <div id="tooltip"></div>
+</body>
+</html> 

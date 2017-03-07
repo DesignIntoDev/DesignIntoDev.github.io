@@ -1,0 +1,83 @@
+<!-- miniature : http://anto-gx.esy.es/image/.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    
+    <style>
+        h4 {
+            margin-left: 10px;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $.ajax({
+                url: "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json",
+                success: function(result) {
+                    result = JSON.parse(result);
+                    
+                    var bas = [], gauche = [];
+                    for(var i = 0; i < result.data.length; i++){
+                        bas.push(result.data[i][0]);
+                        gauche.push(result.data[i][1]);
+                    }
+                    
+                    Highcharts.chart('container', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: result.name
+                        },
+                        subtitle: {
+                            text: result.description
+                        },
+                        xAxis: {
+                            categories: bas,
+                            crosshair: true
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: 'Rainfall (mm)'
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: [{
+                            name: 'US',
+                            data: gauche
+
+                        }]
+                    });
+                },
+                error: function(error) { console.log(error);}
+            });
+        });
+    </script>
+</head>
+<body>
+    <h4>column chart diagram</h4><hr>
+    <div id="container" style="min-width: 310px; height: 400px; background-color: red"></div>
+</body>
+</html> 

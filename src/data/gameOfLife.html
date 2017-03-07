@@ -1,0 +1,208 @@
+<!-- miniature : http://anto-gx.esy.es/image/gameOfLife.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Game of Life</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #BBBBBB;
+            font-family: "Raleway";
+        }
+        h1 {
+            text-align: center;
+        }
+        #setting {
+            background-color: #3A3F41;
+            color: white;
+            font-size: 20px;
+            font-family: "Raleway";
+        }
+        #setting button {
+            border-style: none;
+            background-color: #3A3F41;
+        }
+        #setting button:focus {
+            outline-style: none;
+        }
+        #tab {
+            line-height: 0;
+            margin: auto;
+            text-align: center;
+        }
+        .case {
+            height: 13px;
+            width: 13px;
+            
+            margin: 0.5px;
+            
+            border-style: none;
+            border-radius: 3px;
+        }
+        .case:focus {
+            outline-style: none;
+        }
+        .type0, .type3 {
+            background-color: #47484B;
+        }
+        .type1, .type2 {
+            background-color: white;
+        }
+    </style>
+    <script>
+        var board = [];
+        var running;
+        
+        $(document).ready(function() {
+            
+            var toAdd = "";
+            for(var i = 0; i < 30; i ++){
+                board.push([]);
+                for(var j = 0; j < 30; j ++){
+                    board[i].push(parseInt(Math.random()*10)%2);
+                    toAdd += "<button value='" + board[i][j] + "' id='c" + i + "c" + j + "' class='case type" + board[i][j] + "'> </button>";
+                }
+                toAdd += "<br>";
+            }
+            
+            $("#tab").html(toAdd);
+            
+            
+            $(".case").on("click", function(evt) {
+                var temp = evt.currentTarget.id.split('c');
+                temp = temp.filter(function(val){ return val != ""});
+                
+                if(board[temp[0]][temp[1]] == 0){
+                    board[temp[0]][temp[1]] = 1;
+                    $("#c" + temp[0] + "c" + temp[1]).removeClass("type0");
+                    $("#c" + temp[0] + "c" + temp[1]).addClass("type1");
+                }
+            });
+            
+            $("#start").on("click", function(evt) {
+                running = setInterval(analyse, 100);
+            });
+            
+            $("#stop").on("click", function(evt) {
+                clearInterval(running);
+            });
+            
+            $("#clear").on("click", function(evt) {
+                toAdd = "";
+                board = [];
+                
+                for(var i = 0; i < board.length; i ++){
+                    board.push([]);
+                    for(var j = 0; j < board[0].length; j ++){
+                        board[i].push(0);
+                        toAdd += "<button value='" + board[i][j] + "' id='c" + i + "c" + j + "' class='case type" + board[i][j] + "'> </button>";
+                    }
+                    toAdd += "<br>";
+                }
+
+                $("#tab").html(toAdd);
+
+            
+            
+                $(".case").on("click", function(evt) {
+                    var temp = evt.currentTarget.id.split('c');
+                    temp = temp.filter(function(val){ return val != ""});
+
+                    if(board[temp[0]][temp[1]] == 0){
+                        board[temp[0]][temp[1]] = 1;
+                        $("#c" + temp[0] + "c" + temp[1]).removeClass("type0");
+                        $("#c" + temp[0] + "c" + temp[1]).addClass("type1");
+                    }
+                });
+            });
+        });
+        
+        function analyse() {
+            
+            for(var i = 0; i < board.length; i++){
+                for(var j = 0; j < board[0].length; j++){
+                    if(board[i][j] == 0 && compteVoisin(i, j) == 3){
+                        board[i][j] = 1;
+                        $("#c" + i + "c" + j).removeClass("type0");
+                        $("#c" + i + "c" + j).addClass("type1");
+                    }
+                    
+                    if(board[i][j] == 2 && (compteVoisin(i, j) < 2 || compteVoisin(i, j) > 3)){
+                       board[i][j] = 3;
+                        $("#c" + i + "c" + j).removeClass("type2");
+                        $("#c" + i + "c" + j).addClass("type3");
+                    }
+                }
+            }
+            
+            
+            for(var i = 0; i < board.length; i++){
+                for(var j = 0; j < board[0].length; j++){
+                    if(board[i][j] == 1){
+                        board[i][j] = 2;
+                        $("#c" + i + "c" + j).removeClass("type1");
+                        $("#c" + i + "c" + j).addClass("type2");
+                    }
+                    
+                    if(board[i][j] == 3){
+                       board[i][j] = 0;
+                        $("#c" + i + "c" + j).removeClass("type3");
+                        $("#c" + i + "c" + j).addClass("type0");
+                    }
+                    
+                }
+            }
+            
+        }
+        
+        function compteVoisin(a, b) {
+            var nb = 0;
+            
+
+                if(board[(a-1+board.length)%board.length][b] > 1)
+                    nb++;
+
+                if(board[a][(b-1+board.length)%board.length] > 1)
+                    nb++;
+
+                if(board[(a+1)%board.length][b] > 1)
+                    nb++;
+
+                if(board[a][(b+1)%board.length] > 1)
+                    nb++;
+            
+
+                if(board[(a-1+board.length)%board.length][(b-1+board.length)%board.length] > 1)
+                    nb++;
+
+                if(board[(a-1+board.length)%board.length][(b+1)%board.length] > 1)
+                    nb++;
+
+                if(board[(a+1)%board.length][(b-1+board.length)%board.length] > 1)
+                    nb++;
+
+                if(board[(a+1)%board.length][(b+1)%board.length] > 1)
+                    nb++;
+            
+            return nb;
+        }
+    </script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-12" id="setting">
+            <button id="start">start</button>
+            <button id="stop">stop</button>
+            <button id="clear">clear</button>
+        </div>
+    </div>
+    
+    <h1>The Game of Life</h1>
+    <div id="tab"></div>
+</body>
+</html> 

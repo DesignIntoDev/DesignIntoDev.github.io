@@ -1,0 +1,126 @@
+<!-- miniature : http://anto-gx.esy.es/image/.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    
+    <style>
+        h4 {
+            margin-left: 10px;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            
+            $.ajax({
+                url: "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/cyclist-data.json",
+                success: function(result) {
+                    result = JSON.parse(result);
+                    
+                    var doping = [], nonDoping = [], temp = [];
+                    for(var i = 0; i < result.length; i++){
+                        temp.push(result[i].Time);
+                        temp.push(result[i].Place);
+                        
+                        if(result[i].Doping.length)
+                            doping.push(temp);
+                        else
+                            nonDoping.push(temp);
+                        temp = [];
+                    }
+                    
+                    Highcharts.chart('container', {
+                        chart: {
+                            type: 'scatter',
+                            zoomType: 'xy',
+                        },
+                        title: {
+                            text: 'Height Versus Weight of 507 Individuals by Gender'
+                        },
+                        subtitle: {
+                            text: 'Source: Heinz  2003'
+                        },
+                        xAxis: {
+                            title: {
+                                enabled: true,
+                                text: 'Minutes Behind Fastest Time (s)'
+                            },
+                            startOnTick: true,
+                            endOnTick: true,
+                            showLastLabel: true,
+                            reversed: true
+                        },
+                        yAxis: {
+                            title: {
+                                text: 'Ranking'
+                            },
+                            reversed: true
+                        },
+                        legend: {
+                            layout: 'vertical',
+                            align: 'left',
+                            verticalAlign: 'top',
+                            x: 100,
+                            y: 70,
+                            floating: true,
+                            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF',
+                            borderWidth: 1
+                        },
+                        plotOptions: {
+                            scatter: {
+                                marker: {
+                                    radius: 5,
+                                    states: {
+                                        hover: {
+                                            enabled: true,
+                                            lineColor: 'rgb(100,100,100)'
+                                        }
+                                    }
+                                },
+                                states: {
+                                    hover: {
+                                        marker: {
+                                            enabled: false
+                                        }
+                                    }
+                                },
+                                tooltip: {
+                                    headerFormat: '<b>{series.name}</b><br>',
+                                    pointFormat: '{point.x} s, {point.y}'
+                                }
+                            }
+                        },
+                        series: [{
+                            name: 'Doping',
+                            color: 'rgba(223, 83, 83, .5)',
+                            data: doping
+
+                        }, {
+                            name: 'Non doping',
+                            color: 'rgba(119, 152, 191, .5)',
+                            data: nonDoping
+                        }]
+                    });
+
+
+
+                },
+                error: function(error) { console.log(error);}
+            });
+        });
+    </script>
+</head>
+<body>
+    <h4>Scatter chart diagram</h4><hr>
+    
+    <div id="container" style="min-width: 310px; height: 400px; max-width: 800px; background-color: red"></div>
+</body>
+</html> 

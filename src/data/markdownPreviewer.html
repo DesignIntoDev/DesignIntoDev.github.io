@@ -1,0 +1,56 @@
+<!-- miniature : http://anto-gx.esy.es/data/image/markdownPreviewer.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown Previewer</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    
+    <style>
+        textarea {
+            width: 90%;
+            height: 600px;
+            overflow: auto;
+            resize: none;
+        }
+        h1 {
+            font-family: "Raleway";
+            text-align: center;
+        }
+    </style>
+    <script>
+    var starter = "Heading \n======= \nSub-heading \n----------- \n  \n### Another deeper heading \n  \nParagraphs are separated \nby a blank line. \nLeave 2 spaces at the end of a line to do a   \nline break \nText attributes *italic*, **bold**,  \n`monospace`, ~~strikethrough~~ . \nShopping list: \n  * apples \n  * oranges \n  * pears \nNumbered list: \n  1. apples \n  2. oranges \n  3. pears \nThe rain---not the reign---in \nSpain. \n *[Herman Fassett](https://freecodecamp.com/hermanfassett)*";
+
+    $(document).ready(function() {
+        $('#input').val(starter);
+        
+        $("#output").html(marked(starter));
+        
+        $('#input').bind('input propertychange', function() {
+        $("#output").html(marked($('#input').val()));
+            
+        });
+    });
+    </script>
+</head>
+<body>
+    <h1>Markdown Previewer</h1>
+    
+    <div class="row">
+        <div class="col-sm-1"></div>
+        
+        <div class="col-sm-5">
+            <textarea id="input"></textarea>
+        </div>
+        
+        <div class="col-sm-5">
+            <div id="output"></div>
+        </div>
+        
+        <div class="col-sm-1"></div>
+    </div>
+</body>
+</html> 

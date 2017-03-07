@@ -1,0 +1,36 @@
+<div ng-controller="porfolioCtrl as current" class="content">
+	
+	<div class="jumbotron">
+		<h1>
+			<a class="inverted" ng-click="current.showTab('frontEnd')">FrontEnd Projects</a>
+			 / 
+			<a class="inverted" ng-click="current.showTab('data')">Data Projects</a>
+		</h1>
+		<a ng-click="current.hideHint()" ng-show="hint"><h5><small>Click on the title to navigate (click to hide)</small></h5></a>
+	</div>
+
+    <div class="portfolioPic">
+
+    	<div class="portfolioTab">
+    		<div ng-repeat="val in arr | searchFilter:search" class="single" ng-class="display" ng-show="val.type == tab">
+    				<h3 class="list" ng-class="insideDisplay">{{val.title}}</h3>
+    				<a href="{{val.link}}" ng-class="insideDisplay">
+    					<img src="{{val.imgLink}}" class="img-thumbnail imgBlock" ng-class="insideDisplay">
+    				</a>
+    		</div>
+    	</div>
+
+	    <div id="displayMenu">
+	    	<h3>Display mode :</h3>
+	    	<button ng-click="current.displayMode(0)">
+	    		list <span class="glyphicon glyphicon-th-list"></span>
+    		</button>
+	    	<button ng-click="current.displayMode(1)">
+	    		card <span class="glyphicon glyphicon-th-large"></span>
+    		</button>
+    		<input type="text" ng-model="search" placeholder="Search">
+	    </div>
+
+    </div>
+
+</div>

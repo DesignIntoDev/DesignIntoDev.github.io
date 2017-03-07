@@ -1,0 +1,357 @@
+<!-- miniature : http://anto-gx.esy.es/image/.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+        #app {
+            text-align: center;
+            margin-top: 150px;
+        }
+        h1 {
+            font-family: "Raleway";
+        }
+        h4 {
+            display: inline-block;
+        }
+        #menu {
+            background-color: #3A3F41;
+            color: #F8F8F8;
+        }
+        #menu button {
+            margin-left: 10px;
+            border-style: none;
+            background-color: rgba(0,0,0,0);
+        }
+        #status button {
+            border-style: solid;
+            border-color: darkgrey;
+            border-width: 1px;
+            background-color: white;
+        }
+        .line {
+            height: 20px;
+            background-color: beige;
+        }
+        .case {
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            width: 20px;
+            height: 20px;
+        }
+        .case1 {
+            background-color: brown;
+            border-radius: 5px;
+        }
+        .case2 {
+            background-color: greenyellow;
+        }
+        .case3 {
+            background-color: indianred;
+        }
+        .case4 {
+            border-radius: 50%;
+            background-color: dimgrey;
+        }
+        #plate {
+            display: inline-block;
+            padding: 0;
+            margin-left: 20px;
+            
+            border-width: 1px;
+            border-color: aquamarine;
+            border-style: solid;
+        }
+    </style>
+    <script>        
+        var gameTab = [[{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}]];
+        
+        var bossTab = [[{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}],
+                       [{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0},{"base": 0}]];
+        
+        var currentTab = [];
+        
+        var perso = {pv: 100, weapon: 10, versus: 100};
+        
+        var lvl = 0;
+        var running = false;
+        var finish = false;
+        
+        $(document).ready(function() {
+            
+            $(document).keydown(function(evt){
+                if(running){
+                    var done = false;
+
+                    if(evt.which == 38){
+
+                        for(var i = 1; i < currentTab.length; i++){
+                            for(var j = 0; j < currentTab[i].length; j++){
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i-1][j].base == 0){
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i-1][j].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i-1][j].base == 2){
+                                    upgrade();
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i-1][j].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i-1][j].base == 3){
+                                    if(fight()){
+                                        currentTab[i][j].base = 0;
+                                        currentTab[i-1][j].base = 1;
+                                    }
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i-1][j].base == 4){
+                                    lvl++;
+                                    init();
+                                    done = true;
+                                }
+                            }
+                        }
+
+                    }else if(evt.which == 40){
+
+                        for(var i = 0; i < currentTab.length - 1; i++){
+                            for(var j = 0; j < currentTab[i].length; j++){
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i+1][j].base == 0){
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i+1][j].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i+1][j].base == 2){
+                                    upgrade();
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i+1][j].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i+1][j].base == 3){
+                                    if(fight()){
+                                        currentTab[i][j].base = 0;
+                                        currentTab[i+1][j].base = 1;
+                                    }
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i+1][j].base == 4){
+                                    lvl++;
+                                    init();
+                                    done = true;
+                                }
+                            }
+                        }
+
+                    }else if(evt.which == 39){
+
+                        for(var i = 0; i < currentTab.length; i++){
+                            for(var j = 0; j < currentTab[i].length - 1; j++){
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j+1].base == 0){
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i][j+1].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j+1].base == 2){
+                                    upgrade();
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i][j+1].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j+1].base == 3){
+                                    if(fight()){
+                                        currentTab[i][j].base = 0;
+                                        currentTab[i][j+1].base = 1;
+                                    }
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j+1].base == 4){
+                                    lvl++;
+                                    init();
+                                    done = true;
+                                }
+                            }
+                        }
+
+                    }else if(evt.which == 37){
+
+                        for(var i = 0; i < currentTab.length; i++){
+                            for(var j = 1; j < currentTab[i].length; j++){
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j-1].base == 0){
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i][j-1].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j-1].base == 2){
+                                    upgrade();
+                                    currentTab[i][j].base = 0;
+                                    currentTab[i][j-1].base = 1;
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j-1].base == 3){
+                                    if(fight()){
+                                        currentTab[i][j].base = 0;
+                                        currentTab[i][j-1].base = 1;
+                                    }
+                                    done = true;
+                                }
+                                if(currentTab[i][j].base == 1 && !done && currentTab[i][j-1].base == 4){
+                                    lvl++;
+                                    init();
+                                    done = true;
+                                }
+                            }
+                        }
+
+                    }
+
+                    display();
+                }
+            });
+            
+            $(".newGame").on("click", function(){
+                running = true;
+                finish = false;
+                perso = {pv: 100, weapon: 10, versus: 100};
+                $("#annonce").html("");
+                init();
+                display();
+            });
+        });
+        
+        //0 : ground ; 1 : user ; 2 : bonus ; 3 : warrior ; 4 : way out ;
+        function init() {
+            var options = ["0;0", "0;0", "0;0", "0;0"];
+            var max = 0;
+            
+            perso.versus = (lvl+1)*30;
+            
+            if(lvl < 10){
+                currentTab = gameTab;
+            }else {
+                currentTab = bossTab;
+            }
+            
+            for(var i = 0; i < currentTab.length; i++){
+                for(var j = 0; j < currentTab[i].length; j++){
+                    currentTab[i][j].base = 0;
+                }
+            }
+            
+            for(var i = 1; i < options.length + 1; i++){
+                var done = true;
+                var x = 0, y = 0;
+                do{
+                    x = Math.floor((Math.random()*100)%currentTab.length);
+                    y = Math.floor((Math.random()*100)%currentTab[0].length);
+                    
+                    if(currentTab[x][y].base == 0){
+                        done = false;
+                        
+                        if(!(i == 4 && lvl == 10))
+                            currentTab[x][y].base = i;
+                    }
+                }while (done);
+            }
+        }
+        
+        function display() {
+            var toAdd = "";
+            
+            $("#status").html("<span id='life'>" + perso.pv + "</span><span id='attack'>" + perso.weapon + "</span>†");
+            
+            for(var i = 0; i < currentTab.length; i++){
+                toAdd += "<div class='line' id='l" + i + "'>"
+                for(var j = 0; j < currentTab[i].length; j++){
+                    if(currentTab[i][j].base == 0)
+                        toAdd += "<div class='case0 case' id='c" + j + "'></div>";
+                    if(currentTab[i][j].base == 1)
+                        toAdd += "<div class='case1 case' id='c" + j + "'></div>";
+                    if(currentTab[i][j].base == 2)
+                        toAdd += "<div class='case2 case' id='c" + j + "'></div>";
+                    if(currentTab[i][j].base == 3)
+                        toAdd += "<div class='case3 case' id='c" + j + "'></div>";
+                    if(currentTab[i][j].base == 4)
+                        toAdd += "<div class='case4 case' id='c" + j + "'></div>";
+                }
+                toAdd += "</div>";
+            }
+            $("#plate").html(toAdd);
+            
+            if(finish){
+                if(perso.pv <= 0){
+                    $("#annonce").html("<h1>Vous avez Perdu...</h1>");
+                }else {
+                    $("#annonce").html("<h1>Vous avez Gagné !</h1>");
+                }
+            }
+            
+        }
+        
+        function upgrade() {
+            perso.weapon = Math.floor(perso.weapon * (1.75 - lvl / 20));
+            perso.pv = Math.floor(perso.pv * (1.75 - lvl / 20));
+        }
+        
+        function fight() {
+            
+            // recoit
+            if((Math.random() * 10) < 1){
+                perso.pv = Math.floor(perso.pv - (perso.versus * (Math.random() + 1)));
+            }else perso.pv = Math.floor(perso.pv - (perso.versus * Math.random()));
+            
+            console.log(perso.pv);
+            
+            //tape
+            if(Math.random() < 0.1){
+                perso.versus = Math.floor(perso.versus - (perso.weapon * (Math.random() + 1)));
+            }else perso.versus = Math.floor(perso.versus - (perso.weapon * Math.random()));
+            
+            console.log(perso.versus);
+            
+            if(perso.versus <= 0 || perso.pv <= 0){
+                if(lvl == 10 || perso.pv <= 0){
+                    finish = true;
+                    running = false;
+                }
+                return true;
+            }else return false;
+        }
+    </script>
+</head>
+<body>
+    <div id="menu">
+        <button>Eoto (Roguelike)</button>
+        <button class="newGame">New Game</button>
+    </div>
+        
+    <div id="app">
+        <h1>Roguelike : Eoto</h1>
+        <div id="status">
+            <h1>Welcome</h1>
+            <button class="newGame">Start</button>
+        </div>
+        <div id="plate"></div>
+        <div id="annonce"></div>
+    </div>
+</body>
+</html> 

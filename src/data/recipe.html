@@ -1,0 +1,241 @@
+<!-- miniature : http://anto-gx.esy.es/image/recipesBook.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Courgette" rel="stylesheet">
+    
+    <style>
+        #nav, #nav button {
+            background-color: #47484B;
+            color: white;
+            font-family: "Raleway";
+            font-size: 20px;
+            border-style: none;
+        }
+        #delete {
+            margin-right: 200px;
+        }
+        #validation, #xtra, .supp, #edit {
+            display: none;
+            font-family: "Raleway";
+        }
+        .supp {
+            font-family: "Courgette";
+        }
+        #liste {
+            background-color: #5D5F60;
+            color: #FFAE1B;
+            height: 100%;
+            font-family: "Courgette";
+            font-size: 18px;
+        }
+        button, input {
+            display: inline-block;
+        }
+        #liste button {
+            display: block;
+            margin-left: 20px;
+            margin-top: 10px;
+            background-color: #5D5F60;
+            
+            border-style: none;
+        }
+        #modele {
+            margin: 10px;
+            font-family: "Courgette";
+        }
+        input {
+            margin-left: 10px;
+        }
+        .supp {
+            border-style: none;
+            color: red;
+            background-color: white;
+        }
+    </style>
+    <script>
+        if(!localStorage._AntoGx_recipes)
+            localStorage._AntoGx_recipes = JSON.stringify([{name: "Pasta", ingredients: ["pastas", "water", "salt"]}, {name: "Cheese", ingredients: ["milk", "patience"]}]);
+        
+        var recipes = JSON.parse(localStorage._AntoGx_recipes);
+        var temp = {};
+        var edit = false;
+        
+        $(document).ready(function() {
+            
+            $("#edit").on("click", function() {
+                
+                edit = true;
+                display(temp);
+            });
+            
+            $("#save").on("click", function(evt) {
+                edit = false;
+                
+                if(evt.currentTarget.value == -1){
+                    recipes.push(temp);
+                    
+                    $("#delete").css("display", "inline-block");
+                    $("#save").text("save");
+                    
+                }else recipes[evt.currentTarget.value] = temp;
+                
+                localStorage._AntoGx_recipes = JSON.stringify(recipes);
+                
+                $("#save").val("");
+                $("#delete").val("");
+                $("#refresh").trigger("click");
+            });
+            
+            $("#add").on("click", function() {
+                $("#edit").css("display", "none");
+                
+                $("#refresh").trigger("click");
+                $("#save").val(-1);
+                
+                var toAdd = "";
+                toAdd += "<p>Title : <input id='name' placeholder='name'></p>";
+                
+                $("#modele").html(toAdd);
+                $("#validation").css("display", "block");
+                $("#delete").css("display", "inline-block");
+                $("#save").text("save");
+                $("#delete").css("display", "none");
+                $("#save").text("add");
+                
+                $("#name").on("change", function() {
+                    temp.name = $("#name").val();
+                    temp.ingredients = ["ingredients1", "ingredients2", "..."];
+                });
+                
+            });
+            
+            $("#refresh").on("click", function() {
+                $("#edit").css("display", "none");
+                $("#validation").css("display", "none");
+                $("#xtra").css("display", "none");
+                
+                edit = false;
+
+                $("#modele").html("");
+                temp = {};
+                
+                var toAdd = "";
+                for(var i = 0; i < recipes.length; i++)
+                    toAdd += "<button class='name' value='" + i + "'>" + recipes[i].name + "</button>";
+                $("#liste").html(toAdd);
+
+                $(".name").on("click", function(evt){
+                    edit = false;
+                    $("#edit").css("display", "inline-block");
+                    
+                    $("#modele").html("");
+                    
+                    $("#save").val(evt.currentTarget.value);
+                    $("#delete").val(evt.currentTarget.value);
+                    
+                    display(recipes[evt.currentTarget.value]);
+                });
+            });
+            
+            $("#delete").on("click", function(evt){
+                if(evt.currentTarget.value != "")
+                    delete recipes[evt.currentTarget.value];
+                recipes = recipes.filter(function(val) { return val != null; });
+                
+                
+                localStorage._AntoGx_recipes = JSON.stringify(recipes);
+                                
+                $("#save").val("");
+                $("#delete").val("");
+                $("#refresh").trigger("click");    
+            });
+            
+            $("#refresh").trigger("click");
+        });
+        
+        function display(data){
+            temp = {};
+            
+            temp.name = data.name;
+            temp.ingredients = data.ingredients.filter(function(val) { return true; });
+            
+            var toAdd = "";
+            
+            toAdd += "<p>Title : <input id='name' value='" + temp.name + "' readOnly></p>Ingredients : ";
+            
+            for(var i = 0; i < temp.ingredients.length; i++)
+                toAdd += "<p><input class='currentIngredients'  id='" + i + "' value='" + temp.ingredients[i] + "' readOnly><button class='supp' value='" + i + "'>X</button></p>";
+            
+            $("#modele").html(toAdd);
+            
+            if(edit && temp != {}){
+                $("#validation").css("display", "block");
+                $("#delete").css("display", "inline-block");
+                $("#save").text("save");
+                $("#xtra").css("display", "block");
+                $(".supp").css("display", "inline-block");
+                $("input").removeAttr("readOnly");
+                
+            }else{
+                $("#validation").css("display", "none");
+                $(".supp").css("display", "none");
+                $("#xtra").css("display", "none");
+            }
+            
+            $(".supp").on("click", function(evt){
+                delete temp.ingredients[evt.currentTarget.value];
+                temp.ingredients = temp.ingredients.filter(function(val){ return val != "undefined"});
+                
+                display(temp);
+            });
+            
+            $(".currentIngredients").on("change", function(evt){
+                console.log(evt.currentTarget.id);
+                temp.ingredients[evt.currentTarget.id] = evt.currentTarget.value;
+                temp.ingredients = temp.ingredients.filter(function(val){ return val != "undefined"});
+                
+                display(temp);
+            });
+            
+            $("#xtra").on("change", function(){
+                if($("#xtra").val() != ""){
+                    temp.ingredients.push($("#xtra").val());
+                    temp.ingredients = temp.ingredients.filter(function(val){ return val != "undefined"});
+                    $("#xtra").val("");
+                }
+                display(temp);
+            });
+        }
+        
+    </script>
+</head>
+<body>
+    <div class="row">
+        <div class="col-sm-12" id="nav">
+            <button class="btn" id="refresh">refresh</button>
+            <button class="btn" id="add">add</button>
+            <button class="btn" id="edit">edit</button>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-2" id="liste"></div>
+        <div class="col-sm-8">
+            <div id="modele"></div>
+            <input  id="xtra" placeholder="add ingredient">
+            
+            <div id="validation">
+                <button class="btn btn-danger" id="delete">delete</button>
+                <button class="btn btn-info" id="save">save</button>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,37 @@
+<div ng-controller="contactCtrl as current" class="content">
+
+	<div class="contactPic">
+
+		<div class="contactTab">
+
+			<h2 class="invert">Contact :</h2>
+			<br>
+
+			<form ng-submit="current.submit()">
+			  <div class="inputGroup">
+				  Name :<br>
+				  <input type="text" ng-model="name" placeholder="Mickey">
+			  </div>
+			  
+			  <div class="inputGroup">
+				  Email :<br>
+				  <input type="email" ng-keypress="current.verifEmail()" ng-class="emailStatus" ng-model="email" placeholder="Mickey@example.com">
+			  </div>
+			  
+			  <div class="inputGroup">
+				  Object :<br>
+				  <input type="text" ng-model="object" placeholder="say Hi">
+			  </div>
+			  
+			  <div class="inputGroup">
+				  Text :<br>
+				  <textarea type="text" ng-model="text" placeholder="Hello, "></textarea>
+			  </div>
+
+			  <input type="submit" value="Send">
+			</form>
+		</div>
+
+	</div>
+	
+</div>

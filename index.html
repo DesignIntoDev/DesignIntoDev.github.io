@@ -1,0 +1,370 @@
+<!-- miniature : http://anto-gx.esy.es/image/.png -->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Design into Dev</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+        <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.js"></script>
+
+        <link href="https://fonts.googleapis.com/css?family=Pacifico" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+        
+        <style>
+            body, html, .content {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+            }
+            .row, .flag, .flago {
+                width: 100%;
+                margin: 0;
+            }
+            h1 {
+                display: inline-block;
+                text-align: center;
+                font-family: 'Permanent Marker';
+                padding: 18px;
+                color: #000;
+                background-color: white;
+                width: 400px;
+            }
+            .jumbotron {
+                text-align: center;
+            }
+            .jumbotron h1 {
+                width: auto;
+            }
+            h2 {
+                display: inline-block;
+                padding: 18px;
+                color: #000;
+                background-color: #fff;
+            }
+            .main, .design, .dev {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                width: 100%;
+                text-align: center;
+            }
+            .design {
+
+            }
+            designed {
+                font-family: 'Pacifico';
+            }
+            span {
+                font-family: 'Helvetica Neue'
+            }
+            .mainPic, .designPic, .devPic, .portfolioPic, .contactPic {
+                position: relative;
+                opacity: 0.65;
+                background-attachment: fixed;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                text-align: center;
+            }
+            .mainPic {
+                background-image: url("img/Anto_Picture1.png");
+                min-height: 100%;
+            }
+            .designPic {
+                background-image: url("img/design.jpg");
+                min-height: 400px;
+            }
+            .devPic {
+                background-image: url("img/dev.jpg");
+                min-height: 400px;
+            }
+            .flag {
+
+            }
+            .flago {
+                background-color: #7F7B7C;
+                color: white;
+            }
+            .invert {
+                background-color: transparent;
+                color: white;
+                letter-spacing: 5px;
+            }
+            .inverted {
+                color: #333333;
+            }
+            .inverted:hover {
+                color: #636363;
+            }
+            .nav {
+                position: fixed;
+                z-index: 999;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 50px;
+
+                background-color: #636363;
+                color: white;
+                text-align: center;
+            }
+            .brand {
+                float: left;
+                margin-left: 10px;
+            }
+            .brand, .linkList {
+                margin-top: 10px;
+                font-size: 20px;
+            }
+            .linkList span {
+                margin-right: 50px;
+            }
+            a, a:hover, a:active {
+                color: white;
+                text-decoration: none;
+            }
+            a:hover {
+                cursor: pointer;
+            }
+            .portfolioPic {
+                background-image: url("img/portfolio.jpg");
+                min-height: 100%;
+            }
+            .portfolioTab {
+                display: inline-block;
+                background-color: RGBA(99, 99, 99, 0.8);
+                opacity: 1;
+                text-align: left;
+                border-radius: 5px;
+                margin-top: 20px;
+                color: white;
+                max-width: 75%;
+            }
+            .single {
+                margin: 20px;
+            }
+            .card {
+                display: inline-block;
+            }
+            .line {
+                display: block;
+            }
+            .imgBlock {
+                width: 400px;
+                height: auto;
+                opacity: 1;
+            }
+            .jumbotron {
+                margin-bottom: 0;
+            }
+            #displayMenu {
+                float: left;
+                margin-top: 20px;
+                padding: 10px;
+                padding-bottom: 10px;
+
+                border-radius: 0 5px 5px 0;
+                background-color: RGBA(99, 99, 99, 0.8);
+            }
+            #displayMenu button {
+                display: block;
+                border-style: none;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+            #displayMenu h3 {
+                color: white;
+                margin-top: 0px;
+                padding-top: 0px;
+            }
+            .list {
+                width: 40%;
+            }
+            .contactPic {
+                background-image: url("img/contact.jpg");
+                min-height: 100%;
+            }
+            .contactTab {
+                margin-top: 50px;
+                text-align: center;
+            }
+            form {
+                padding: 20px;
+                background-color: RGBA(99, 99, 99, 0.8);
+                border-radius: 5px;
+                display: inline-block;
+                color: white;
+                width: 240px;
+            }
+            input, textarea {
+                color: #212120;
+                width: 200px;
+                resize: none;
+            }
+            textarea {
+                height: 100px;
+            }
+            input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+                color: #636363;
+            }
+            .inputGroup {
+                text-align: left;
+                margin-bottom: 10px;
+            }
+            input[type="submit"] {
+                width: auto;
+                float: right;
+                border-style: solid;
+                border-width: 1px;
+                cursor: pointer;
+                background-color: white;
+            }
+            .success {
+                color: #3F8529;
+            }
+            .warning {
+                color: #F5264A;
+            }
+            /* adapte la page en fonction de la largeur de l'écran */
+            @media only screen and (max-device-width: 1200px) {
+              #displayMenu {
+                display: none;
+              }
+              .list {
+                width: 100%;
+              }
+              .single {
+                display: block;
+              }
+              h1 a {
+                display: block;
+              }
+            }
+            /* adapte la page en fonction de la largeur de l'écran */
+            @media only screen and (max-device-width: 1024px) {
+              .mainPic, .designPic, .devPic, .portfolioPic, .contactPic {
+                background-attachment: scroll;
+              }
+            }
+        </style>
+        <script>
+            var app = angular.module("myApp", ["ngRoute"]);
+
+            app.config(function($routeProvider, $locationProvider) {
+                $routeProvider
+                .when("/", {
+                    templateUrl: "src/main.html"
+                })
+                .when("/portfolio", {
+                    templateUrl: "src/portfolio.html",
+                    controller: "porfolioCtrl"
+                })
+                .when("/contact", {
+                    templateUrl: "src/contact.html",
+                    controller: "contactCtrl"
+                })
+            });
+
+            app.controller("porfolioCtrl", function($scope, $http) {
+
+                $http.get("src/projects.json").then(function(response) {
+                    $scope.hint = true;
+                    $scope.tab = "frontEnd";
+                    $scope.display = "card";
+                    $scope.insideDisplay = "line";
+                    $scope.arr = response.data.Container;
+                });
+
+                this.hideHint = function() {
+                    console.log("plop");
+                    $scope.hint = false;
+                };
+
+                this.showTab = function(value) {
+                    $scope.tab = value;
+                };
+
+                this.displayMode = function(value) {
+                    if(value == 0){
+                        $scope.display = "line";
+                        $scope.insideDisplay = "card";
+                    }else {
+                        $scope.display = "card";
+                        $scope.insideDisplay = "line";
+                    }
+                };
+            });
+            app.controller("contactCtrl", function($scope, $http) {
+
+                this.submit = function() {
+                    var json = {};
+                    json.name = $scope.name;
+                    json.email = $scope.email;
+                    json.object = $scope.object;
+                    json.text = $scope.text;
+
+                    if(json.name != undefined && json.email != undefined && json.object != undefined && json.text != undefined)
+                        $http.put("http://localhost:5000/new", json).then(function(response){
+                        console.log(response);
+                        });
+                };
+
+                this.verifEmail = function() {
+                    if($scope.email == undefined)
+                        $scope.emailStatus = "warning";
+                    else $scope.emailStatus = "success";
+                };
+            });
+
+            app.filter("searchFilter", function() {
+                return function(items, searchStr) {
+                    var filtered = [];
+                    if(items)
+                        for (var i = 0; i < items.length; i++) {
+                            if(items[i].title.indexOf(searchStr) >= 0)
+                                filtered.push(items[i])
+                        }
+
+                    if(searchStr != undefined)
+                        return filtered;
+
+                    return items;
+                };
+            });
+        </script>
+    </head>
+    <body>
+        <div class="nav">
+            <a href="#/"><span class="brand">D. into D.</span></a>
+
+            <div class="linkList">
+                <a href="#/" ng-class="$location.url() == ''"><span>About</span></a>
+                <a href="#/portfolio" ng-class=""><span>Portfolio</span></a>
+                <a href="#/contact" ng-class=""><span>Contact</span></a>
+            </div>
+        </div>
+
+        <div ng-app="myApp" class="content">
+            <div class="content" ng-view></div>
+        </div>
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

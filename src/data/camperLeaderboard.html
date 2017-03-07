@@ -1,0 +1,137 @@
+<!-- miniature : http://anto-gx.esy.es/data/image/camperLeaderboard.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camper Leaderboard</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    
+    <style>
+        img {
+            width: 80px;
+            height: 80px;
+            border: 1px solid #979797;
+            border-radius: 8px;
+        }
+        #legend {
+        }
+        th {
+            font-family: "Raleway";
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 49px;
+            color: #4A4A4A;
+        }
+        td {
+            font-family: "Avenir Next";
+            font-size: 18px;
+            line-height: 26px;
+            color: #4A4A4A;
+        }
+        table {
+            width: 100%;
+        }
+        button {
+            border-style: none;
+            font-family: "Raleway";
+            font-size: 30px;
+            font-weight: bold;
+            line-height: 49px;
+            color: #4A4A4A;
+            background-color: white;
+        }
+        #starter {
+            display: none;
+        }
+    </style>
+    <script>
+        var liste = [];
+        
+        $(document).ready(function() {
+            
+            $("#starter").on("click", function() {
+                $.ajax({
+                    url: "https://fcctop100.herokuapp.com/api/fccusers/top/recent",
+                    type: "GET",
+                    success: function(result){
+                        liste = result;
+                        liste.sort(monthly);
+                        show();
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            });
+            
+            $("#starter").trigger("click");
+        }); 
+        
+        function show() {
+            var toAdd = "<tr><th>Profile Pic</th> <th>Pseudo</th> <th><button id='monthly'>Current period</button></th> <th><button id='total'>All time period</button></th></tr>";
+            for(var i = liste.length - 1; i >= 0; i--)
+                toAdd += "<tr><td><img src='" + liste[i].img + "' ></td><td>" + liste[i].username + "</td> <td>" + liste[i].recent + "</td> <td>" + liste[i].alltime + "</td> </tr>";
+            $("#list").html(toAdd);
+            
+            $("#monthly").on("click", function() {
+                $.ajax({
+                    url: "https://fcctop100.herokuapp.com/api/fccusers/top/recent",
+                    type: "GET",
+                    success: function(result){
+                        liste = result;
+                        liste.sort(monthly);
+                        show();
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            });
+
+            $("#total").on("click", function() {
+                $.ajax({
+                    url: "https://fcctop100.herokuapp.com/api/fccusers/top/recent",
+                    type: "GET",
+                    success: function(result){
+                        liste = result;
+                        liste.sort(total);
+                        show();
+                    },
+                    error: function(error){
+                        console.log(error);
+                    }
+                });
+            });
+        }
+        
+        function monthly(a,b) {
+          if (a.recent < b.recent)
+            return -1;
+          if (a.recent > b.recent)
+            return 1;
+          return 0;
+        }
+        
+        function total(a,b) {
+          if (a.alltime < b.alltime)
+            return -1;
+          if (a.alltime > b.alltime)
+            return 1;
+          return 0;
+        }
+    </script>
+</head>
+<body>
+    <button id="starter"></button>
+    <div class="row">
+        <div class="col-sm-2"></div>
+            <div  class="col-sm-8">
+                <table id="list"></table>
+            </div>
+        <div class="col-sm-2"></div>
+        
+    </div>
+</body>
+</html> 
