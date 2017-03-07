@@ -330,12 +330,14 @@
             });
 
             // custom filtre permettant de faire une recherche dans la liste des projets
+            //case sensitive for now
             app.filter("searchFilter", function() {
                 return function(items, searchStr) {
                     var filtered = [];
                     if(items)
                         for (var i = 0; i < items.length; i++) {
-                            if(items[i].title.indexOf(searchStr) >= 0)
+
+                            if(items[i].indexOf(searchStr) >= 0)
                                 filtered.push(items[i])
                         }
 
