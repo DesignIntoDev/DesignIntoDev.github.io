@@ -1,0 +1,104 @@
+<!-- miniature : http://anto-gx.esy.es/data/image/markdownPreviewer.png -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Markdown Previewer</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script   src="https://code.jquery.com/jquery-3.1.1.min.js"   integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="   crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.6/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+    
+    <style>
+        textarea {
+            width: 90%;
+            height: 600px;
+            overflow: auto;
+            resize: none;
+        }
+        h1{
+            font-family: "Raleway";
+            text-align: center;
+        }
+        img {
+            width: 100%;
+        }
+        blockquote {
+            border-top: none;
+            border-right: none;
+            border-bottom: none;
+        }
+        .customization {
+            display: none;
+        }
+    </style>
+    <script>
+    var data = "";
+    var show = false;
+
+
+    $(document).ready(function() {
+        $.get('/CV content.md', function(data) {
+            console.log(data);
+
+            $('#input').val(data);
+            
+            $("#output").html(marked(data));
+            $("#left").html(marked('<img class="img-thumbnail" src="/Antoine Goubin.bmp">' + data.split("¤")[1]));
+            $("#right").html(marked(data.split("¤")[2]));
+        });
+        
+        $('#input').bind('input propertychange', function() {
+            $("#output").html(marked($('#input').val()));
+        });
+        
+        $('h1').bind('click', function() {
+            if(show)
+                $(".customization").css("display", "none");
+            else $(".customization").css("display", "block");
+
+            show = !show;
+        });
+    });
+    </script>
+</head>
+<body>
+    <h1>Markdown Previewer</h1>
+
+    <hr>
+    
+    <div class="row customization">
+        <div class="col-sm-1"></div>
+        
+        <div class="col-sm-10">
+            <textarea id="input"></textarea>
+        </div>
+        
+        <div class="col-sm-1"></div>
+    </div>
+    
+    <div class="row customization">
+        <div class="col-sm-1"></div>
+        
+        <div class="col-sm-10">
+            <div id="output"></div>
+        </div>
+        
+        <div class="col-sm-1"></div>
+    </div>
+    
+    <div class="row">
+        <div class="col-sm-1"></div>
+        
+        <div class="col-sm-3">
+            <div id="left"></div>
+        </div>
+        
+        <div class="col-sm-7">
+            <div id="right"></div>
+        </div>
+        
+        <div class="col-sm-1"></div>
+    </div>
+</body>
+</html> 
